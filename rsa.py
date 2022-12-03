@@ -76,14 +76,40 @@ def rsa(message, mode, pk, sk, n):
         print(number)
         cripted_message = pow(int(number), pk, n)
 
-
-
-        cripted_message=str(cripted_message)
-
-
-        return cripted_message
+        print(cripted_message)
+        # print("Numar criptat ",cripted_message)
+        ascii_cripted_message = ""
+        ok = 0
+        if len(str(cripted_message)) % 2 == 1:
+            print("Nu este bine aici:")
+            cripted_message = str(cripted_message)
+            cripted_message += '0'
+            ok = 1
+        cripted_message = str(cripted_message)
+        for i in range(0, len(cripted_message), 2):
+            # if ok==1:
+            #     if (i==len(cripted_message)):
+            #         ascii_cripted_message+=chr(cripted_message[len(cripted_message)-1])
+            ascii_cripted_message += chr(int(cripted_message[i:i + 2]))
+        if ok == 1:
+            ascii_cripted_message += "-1"
+        return ascii_cripted_message
     elif mode == "decript":
-        decripted_message = pow(int(message), sk, n)
+        decript_number = 0
+        ok = 0
+        message = str(message)
+        if message.__contains__("-1"):
+            ok = 1
+            message = message[0:len(message) - 2]
+        for i in message:
+            decript_number *= 100;
+            decript_number += ord(i)
+        print("Numar decriptat:", decript_number)
+        if ok == 1:
+            decript_number = str(decript_number)
+            decript_number = decript_number[0:len(decript_number) - 1]
+            decript_number = int(decript_number)
+        decripted_message = pow(int(decript_number), sk, n)
         decripted_message = str(decripted_message)
 
         decripted_string = ""
@@ -96,5 +122,4 @@ def rsa(message, mode, pk, sk, n):
                 add = 3
             decripted_string += chr(current_value)
             i += add
-
-    print(decripted_string)
+        return decripted_string
