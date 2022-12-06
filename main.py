@@ -1,6 +1,5 @@
 from rsa import isPrime, generate_parameters, rsa
-
-
+from des import *
 def encript_file(pk, sk, n):
     cripted = rsa("The reality shows that the distribution of the scores obtained The reality shows that the distribu", "encript", pk, sk, n)
     try:
@@ -27,10 +26,11 @@ def main():
     # cripted = rsa("Andreea", "encript", pk, sk, n)
     # print("decriptare:")
     # print(rsa(cripted, "decript", pk, sk, n))
-
     encript_file(pk,sk,n)
     decript_file(pk,sk,n)
 
 
-if __name__ == "__main__":
-    main()
+
+# if __name__ == "__main__":
+#    # main()
+#    cript()
