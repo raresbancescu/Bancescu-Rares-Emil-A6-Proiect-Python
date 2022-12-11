@@ -183,95 +183,102 @@ def dec2bin(num):
     return res
 
 
-def encrypt(pt, key):
-    pt = text_to_binary(pt)
+def encrypt(plain, key):
+    final_return = ""
+    plain = text_to_binary(plain)
     key = permute(key, key_perm, 56)
     round_k = round_keys(key)
+    for block in range(0, len(plain), 64):
+        pt = plain[block:block + 64]
+        # Initial Permutation
+        pt = permute(pt, IP, 64)
 
-    # Initial Permutation
-    pt = permute(pt, IP, 64)
+        # Splitting
+        left = pt[0:32]
+        right = pt[32:64]
+        for i in range(0, 16):
+            #  Expansion D-box: Expanding the 32 bits data into 48 bits
+            right_expanded = permute(right, RE, 48)
 
-    # Splitting
-    left = pt[0:32]
-    right = pt[32:64]
-    for i in range(0, 16):
-        #  Expansion D-box: Expanding the 32 bits data into 48 bits
-        right_expanded = permute(right, RE, 48)
+            # XOR RoundKey[i] and right_expanded
+            xor_x = xor(right_expanded, round_k[i])
 
-        # XOR RoundKey[i] and right_expanded
-        xor_x = xor(right_expanded, round_k[i])
+            # S-boxex: substituting the value from s-box table by calculating row and column
+            sbox_str = ""
+            for j in range(0, 8):
+                row = bin2dec(int(xor_x[j * 6] + xor_x[j * 6 + 5]))
+                col = bin2dec(
+                    int(xor_x[j * 6 + 1] + xor_x[j * 6 + 2] + xor_x[j * 6 + 3] + xor_x[j * 6 + 4]))
+                val = sbox[j][row][col]
+                sbox_str = sbox_str + dec2bin(val)
 
-        # S-boxex: substituting the value from s-box table by calculating row and column
-        sbox_str = ""
-        for j in range(0, 8):
-            row = bin2dec(int(xor_x[j * 6] + xor_x[j * 6 + 5]))
-            col = bin2dec(
-                int(xor_x[j * 6 + 1] + xor_x[j * 6 + 2] + xor_x[j * 6 + 3] + xor_x[j * 6 + 4]))
-            val = sbox[j][row][col]
-            sbox_str = sbox_str + dec2bin(val)
+            # Straight D-box: After substituting rearranging the bits
+            sbox_str = permute(sbox_str, box_permutation, 32)
 
-        # Straight D-box: After substituting rearranging the bits
-        sbox_str = permute(sbox_str, box_permutation, 32)
+            # XOR left and sbox_str
+            result = xor(left, sbox_str)
+            left = result
 
-        # XOR left and sbox_str
-        result = xor(left, sbox_str)
-        left = result
+            # Swapper
+            if (i != 15):
+                left, right = right, left
 
-        # Swapper
-        if (i != 15):
-            left, right = right, left
+        # Combination
+        combine = left + right
 
-    # Combination
-    combine = left + right
-
-    # Final permutation: final rearranging of bits to get cipher text
-    cipher_text = permute(combine, IPF, 64)
-    return cipher_text
+        # Final permutation: final rearranging of bits to get cipher text
+        cipher_text = permute(combine, IPF, 64)
+        final_return += cipher_text
+    return final_return
 
 
-def decript(cipher, key):
+def decript(encripted_text, key):
+    final_return = ""
+    encripted_text=text_to_binary(encripted_text)
     key = permute(key, key_perm, 56)
     round_k = round_keys(key)
     round_k = round_k[::-1]
-    cipher = permute(cipher, IP, 64)
+    for block in range(0, len(encripted_text), 64):
+        cipher = encripted_text[block:block + 64]
+        cipher = permute(cipher, IP, 64)
 
-    # Splitting
-    left = cipher[0:32]
-    right = cipher[32:64]
-    for i in range(0, 16):
-        #  Expansion D-box: Expanding the 32 bits data into 48 bits
-        right_expanded = permute(right, RE, 48)
+        # Splitting
+        left = cipher[0:32]
+        right = cipher[32:64]
+        for i in range(0, 16):
+            #  Expansion D-box: Expanding the 32 bits data into 48 bits
+            right_expanded = permute(right, RE, 48)
 
-        # XOR RoundKey[i] and right_expanded
-        xor_x = xor(right_expanded, round_k[i])
+            # XOR RoundKey[i] and right_expanded
+            xor_x = xor(right_expanded, round_k[i])
 
-        # S-boxex: substituting the value from s-box table by calculating row and column
-        sbox_str = ""
-        for j in range(0, 8):
-            row = bin2dec(int(xor_x[j * 6] + xor_x[j * 6 + 5]))
-            col = bin2dec(
-                int(xor_x[j * 6 + 1] + xor_x[j * 6 + 2] + xor_x[j * 6 + 3] + xor_x[j * 6 + 4]))
-            val = sbox[j][row][col]
-            sbox_str = sbox_str + dec2bin(val)
+            # S-boxex: substituting the value from s-box table by calculating row and column
+            sbox_str = ""
+            for j in range(0, 8):
+                row = bin2dec(int(xor_x[j * 6] + xor_x[j * 6 + 5]))
+                col = bin2dec(
+                    int(xor_x[j * 6 + 1] + xor_x[j * 6 + 2] + xor_x[j * 6 + 3] + xor_x[j * 6 + 4]))
+                val = sbox[j][row][col]
+                sbox_str = sbox_str + dec2bin(val)
 
-        # Straight D-box: After substituting rearranging the bits
-        sbox_str = permute(sbox_str, box_permutation, 32)
+            # Straight D-box: After substituting rearranging the bits
+            sbox_str = permute(sbox_str, box_permutation, 32)
 
-        # XOR left and sbox_str
-        result = xor(left, sbox_str)
-        left = result
+            # XOR left and sbox_str
+            result = xor(left, sbox_str)
+            left = result
 
-        # Swapper
-        if (i != 15):
-            left, right = right, left
+            # Swapper
+            if (i != 15):
+                left, right = right, left
 
-    # Combination
-    combine = left + right
+        # Combination
+        combine = left + right
 
-    # Final permutation: final rearranging of bits to get cipher text
-    cipher_text = permute(combine, IPF, 64)
-    return cipher_text
-    return text
+        # Final permutation: final rearranging of bits to get cipher text
+        cipher_text = permute(combine, IPF, 64)
+        final_return += cipher_text
+    return final_return
 
 
 def permute(k, arr, n):
@@ -281,8 +288,37 @@ def permute(k, arr, n):
     return permutation
 
 
-print(text_to_binary("rares"))
-cipher = encrypt("rares", "0110001101110010011010010111000001110100011011110110001101110010")
-print(cipher)
-plain = decript(cipher, "0110001101110010011010010111000001110100011011110110001101110010")
-print(plain)
+def key_to_binary(message):
+    binary_key = text_to_binary(message)
+    return binary_key
+
+
+def binary_to_text(bit_string):
+    returned_text = ""
+    for i in range(0, len(bit_string), 8):
+        current_bit_string = bit_string[i:i + 8]
+        number = 0
+        power = 1
+        current_bit_string = int(current_bit_string)
+        while current_bit_string > 0:
+            rem = current_bit_string % 10
+            current_bit_string = current_bit_string // 10
+            number += rem * power
+            power = power * 2
+        returned_text += chr(number)
+    return returned_text
+
+
+# print(text_to_binary("rares"))
+# cipher = encrypt("rares", "0110001101110010011010010111000001110100011011110110001101110010")
+# print(binary_to_text(cipher))
+# plain = decript(cipher, "0110001101110010011010010111000001110100011011110110001101110010")
+# print(binary_to_text(plain))
+
+print("second round: ")
+print(text_to_binary("raresraresraresraresraresraresraresraresraresraresraresraresraresraresraresrares"))
+cipher = encrypt("raresrares123123 :'8888**&3raresraresraresraresraresraresraresraresraresraresraresraresraresrares", key_to_binary("cripto"))
+print(binary_to_text(cipher))
+cipher=binary_to_text(cipher)
+plain = decript(cipher, key_to_binary("cripto"))
+print(binary_to_text(plain))
