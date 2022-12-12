@@ -1,5 +1,6 @@
-from rsa import isPrime, generate_parameters, rsa
-from des import *
+from encryptionAlgorithms.rsa import generate_parameters, rsa
+from encryptionAlgorithms.des import *
+from filesManipulation.operations import *
 def encript_file(pk, sk, n):
     cripted = rsa("The reality shows that the distribution of the scores obtained The reality shows that the distribu", "encript", pk, sk, n)
     try:
@@ -39,8 +40,9 @@ def main():
     # print(rsa(cripted, "decript", pk, sk, n))
     # encript_file(pk,sk,n)
     # decript_file(pk,sk,n)
-    hibrid_encription()
-
-
+    #hibrid_encription()
+    create_file("rares.txt")
+    #read_file()
+    #generate_paths()
 if __name__ == "__main__":
    main()

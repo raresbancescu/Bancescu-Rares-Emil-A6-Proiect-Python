@@ -1,0 +1,1 @@
+print("The main part of the program")

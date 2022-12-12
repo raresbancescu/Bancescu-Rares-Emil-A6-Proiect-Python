@@ -61,7 +61,7 @@ def generate_parameters():
 
 
 def rsa(message, mode, pk, sk, n):
-    if mode == "encript":
+    if mode == "encrypt":
         number = 0
         for c in message:
             if len(str(ord(c))) == 2:
@@ -73,10 +73,10 @@ def rsa(message, mode, pk, sk, n):
             if len(str(ord(c))) == 1:
                 number = number * 10
                 number = number + ord(c)
-        print(number)
+        #print(number)
         cripted_message = pow(int(number), pk, n)
 
-        print(cripted_message)
+        #print(cripted_message)
         # print("Numar criptat ",cripted_message)
         ascii_cripted_message = ""
         ok = 0
@@ -94,7 +94,7 @@ def rsa(message, mode, pk, sk, n):
         if ok == 1:
             ascii_cripted_message += "-1"
         return ascii_cripted_message
-    elif mode == "decript":
+    elif mode == "decrypt":
         decript_number = 0
         ok = 0
         message = str(message)
@@ -104,7 +104,7 @@ def rsa(message, mode, pk, sk, n):
         for i in message:
             decript_number *= 100;
             decript_number += ord(i)
-        print("Numar decriptat:", decript_number)
+        #print("Numar decriptat:", decript_number)
         if ok == 1:
             decript_number = str(decript_number)
             decript_number = decript_number[0:len(decript_number) - 1]

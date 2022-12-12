@@ -40,12 +40,12 @@ def database_select(query):
         print(e)  # return "error" next step
 
 
-file_name = r"rares3.txt"
-file_path = r"D:\\facultate\\Anul 3\\Semestrul 1\\Python\\Proiect\\encriptedfiles\\rares.txt"
-public_key_path = r"D:\\facultate\Anul 3\\Semestrul 1\\Python\\Proiect\\encriptedfiles\\rares.txt"
-encrypted_key_path = r"D:\\facultate\\Anul 3\\Semestrul 1\\Python\\Proiect\\encriptedfiles\\rares.txt"
-query = "insert into files  values (\"%s\",\"%s\",\"%s\",\"%s\")" % (
-    file_name, file_path, public_key_path, encrypted_key_path)
-# database_update(query)
-result = database_select("select * from files")
-print(result)
+# file_name = r"rares3.txt"
+# file_path = r"/encriptedfiles/rares.txt"
+# public_key_path = r"/encriptedfiles/rares.txt"
+# encrypted_key_path = r"/encriptedfiles/rares.txt"
+# query = "insert into files  values (\"%s\",\"%s\",\"%s\",\"%s\")" % (
+#     file_name, file_path, public_key_path, encrypted_key_path)
+# # database_update(query)
+# result = database_select("select * from files")
+# print(result)
