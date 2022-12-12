@@ -42,7 +42,7 @@ def main():
     # decript_file(pk,sk,n)
     #hibrid_encription()
     create_file("rares.txt")
-    #read_file()
+    read_file("rares.txt")
     #generate_paths()
 if __name__ == "__main__":
    main()

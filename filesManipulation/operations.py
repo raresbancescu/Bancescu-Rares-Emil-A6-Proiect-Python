@@ -25,39 +25,38 @@ def read_from_file(file_path):
         message = file_descriptor.read()
         message = message.decode()
         return message
-    except:
-        print("Eroare")
+    except Exception as e:
+        print(e)
 
 
 def generate_paths():
     paths = []
-    for dirs, root, files in os.walk(r"D:\facultate\Anul 3\Semestrul 1\Python\Proiect\secretdata"):
+    for dirs, root, files in os.walk(r"D:\\facultate\\Anul 3\\Semestrul 1\\Python\\Proiect\\secretdata"):
         for file in files:
             paths.append(os.path.abspath(os.path.join(dirs, file)))
     print(paths)
-    secret_path = r"D:\facultate\Anul 3\Semestrul 1\Python\Proiect\secretdata"
-
+    secret_path = r'D:/facultate/Anul 3/Semestrul 1/Python/Proiect/secretdata'
     pk_name = "".join(choice(string.ascii_lowercase) for i in range(10))
-    pk_name = secret_path + "\\" + pk_name
+    pk_name = secret_path + "/" + pk_name
     while pk_name in paths:
         pk_name = "".join(choice(string.ascii_lowercase) for i in range(10))
-        pk_name = secret_path + "\\" + pk_name
+        pk_name = secret_path + "/" + pk_name
     pk_name += ".key"
     paths.append(pk_name)
 
     sk_name = "".join(choice(string.ascii_lowercase) for i in range(10))
-    sk_name = secret_path + "\\" + sk_name
+    sk_name = secret_path + "/" + sk_name
     while sk_name in paths:
         sk_name = "".join(choice(string.ascii_lowercase) for i in range(10))
-        sk_name = secret_path + "\\" + sk_name
+        sk_name = secret_path + "/" + sk_name
     sk_name += ".key"
     paths.append(sk_name)
 
     key_name = "".join(choice(string.ascii_lowercase) for i in range(10))
-    key_name = secret_path + "\\" + key_name
+    key_name = secret_path + "/" + key_name
     while key_name in paths:
         key_name = "".join(choice(string.ascii_lowercase) for i in range(10))
-        key_name = secret_path + "\\" + key_name
+        key_name = secret_path + "/" + key_name
     key_name += ".key"
     paths.append(key_name)
 
@@ -65,8 +64,8 @@ def generate_paths():
 
 
 def create_file(file_name):
-    file_path = r"D:\facultate\Anul 3\Semestrul 1\Python\Proiect\encriptedfiles"
-    file_path += "\\" + file_name
+    file_path = r"D:/facultate/Anul 3/Semestrul 1/Python/Proiect/encriptedfiles"
+    file_path += "/" + file_name
     try:
         file_descriptor = open(file_path, "w")
         file_descriptor.close()
@@ -93,8 +92,8 @@ def create_file(file_name):
         write_in_file(sk_path, secret_key)
         write_in_file(key_path, encrypted_key)
         write_in_file(file_path, encrypted_text)
-
-        query = "insert into files values (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\")" % (
+        file_path
+        query = "insert into files values (\'%s\',\'%s\',\'%s\',\'%s\',\'%s\')" % (
             file_name, file_path, pk_path, sk_path, key_path)
         print(query)
         database_update(query)
@@ -102,12 +101,20 @@ def create_file(file_name):
         print(e)
 
 
+def read_file(file_name):
+    query = "select * from files where filename='%s'" % file_name
+    result = database_select(query)
+    result = result[0]
+    paths = list()
+    for res in result:
+        res = str(res)
+        res = res.replace("/", "\\")
+        paths.append(res)
 
-def read_file():
-    encripted_key = read_from_file(r"D:\facultate\Anul 3\Semestrul 1\Python\Proiect\secretdata\encryptedkey.key")
-    private_key = read_from_file(r"D:\facultate\Anul 3\Semestrul 1\Python\Proiect\secretdata\privatekey.key")
-    public_key = read_from_file(r"D:\facultate\Anul 3\Semestrul 1\Python\Proiect\secretdata\publickey.key")
-    text = read_from_file(r"D:\facultate\Anul 3\Semestrul 1\Python\Proiect\encriptedfiles\rares.txt")
+    encripted_key = read_from_file(paths[4])
+    private_key = read_from_file(paths[3])
+    public_key = read_from_file(paths[2])
+    text = read_from_file(paths[1])
     private_key = private_key.split("\n")
     public_key = public_key.split("\n")
     sk = int(private_key[0])
@@ -118,7 +125,37 @@ def read_file():
     text = text_to_binary(text)
     message = decript(text, key)
     message = binary_to_text(message)
+    # write the message back in file
+    message = str(message)
+    message=message[2:]
+    message=message[:len(message)-2]
     print(message)
+    file_descriptor = open(paths[1], "w+")
+    i = 0
+    while i < len(message):
+        print(message[i])
+        if message[i] != '\\':
+            file_descriptor.write(message[i])
+            i = i + 1
+        else:
+            if message[i] == '\\' and message[i + 1] != 'r' and message[i + 1] != 'n' and message[i + 1] != 't':
+                file_descriptor.write(message[i])
+                i = i + 1
+            else:
+                if message[i + 1] == 'n':
+                    file_descriptor.write(chr(10))
+                elif message[i + 1] == 't':
+                    file_descriptor.write(chr(9))
+                else:
+                    file_descriptor.write("")
+                i = i + 2
+    file_descriptor.close()
+    subprocess.call(["notepad.exe", paths[1]])
+    while not file_descriptor.closed:
+        os.wait()
+
+    #read from file,encrypt again,write back in file
+
 
 # def example():
 #     try:
