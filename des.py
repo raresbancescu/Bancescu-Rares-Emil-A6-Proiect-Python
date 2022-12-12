@@ -185,6 +185,7 @@ def dec2bin(num):
 
 def encrypt(plain, key):
     final_return = ""
+    key = key_to_binary(key)
     plain = text_to_binary(plain)
     key = permute(key, key_perm, 56)
     round_k = round_keys(key)
@@ -234,6 +235,8 @@ def encrypt(plain, key):
 
 def decript(encripted_text, key):
     final_return = ""
+    encripted_text=binary_to_text(encripted_text)
+    key=key_to_binary(key)
     encripted_text=text_to_binary(encripted_text)
     key = permute(key, key_perm, 56)
     round_k = round_keys(key)
@@ -315,10 +318,10 @@ def binary_to_text(bit_string):
 # plain = decript(cipher, "0110001101110010011010010111000001110100011011110110001101110010")
 # print(binary_to_text(plain))
 
-print("second round: ")
-print(text_to_binary("raresraresraresraresraresraresraresraresraresraresraresraresraresraresraresrares"))
-cipher = encrypt("raresrares123123 :'8888**&3raresraresraresraresraresraresraresraresraresraresraresraresraresrares", key_to_binary("cripto"))
-print(binary_to_text(cipher))
-cipher=binary_to_text(cipher)
-plain = decript(cipher, key_to_binary("cripto"))
-print(binary_to_text(plain))
+# print("second round: ")
+# print(text_to_binary("raresraresraresraresraresraresraresraresraresraresraresraresraresraresraresrares"))
+# cipher = encrypt("raresrares123123 :'8888**&3raresraresraresraresraresraresraresraresraresraresraresraresraresrares", key_to_binary("cripto"))
+# print(binary_to_text(cipher))
+# cipher=binary_to_text(cipher)
+# plain = decript(cipher, key_to_binary("cripto"))
+# print(binary_to_text(plain))
