@@ -105,6 +105,7 @@ def read_file(file_name):
     query = "select * from files where filename='%s'" % file_name
     result = database_select(query)
     result = result[0]
+
     paths = list()
     for res in result:
         res = str(res)
@@ -127,35 +128,45 @@ def read_file(file_name):
     message = binary_to_text(message)
     # write the message back in file
     message = str(message)
-    message=message[2:]
-    message=message[:len(message)-2]
     print(message)
     file_descriptor = open(paths[1], "w+")
-    i = 0
-    while i < len(message):
-        print(message[i])
-        if message[i] != '\\':
-            file_descriptor.write(message[i])
-            i = i + 1
-        else:
-            if message[i] == '\\' and message[i + 1] != 'r' and message[i + 1] != 'n' and message[i + 1] != 't':
+
+    if message[0] == 'b' and message[1] == '\'':
+        i = 2
+    else:
+        i = 0
+    message_length = len(message)-1
+    while message[message_length] == 0:
+        message_length -= 1
+    message_length -= 1
+    while i < message_length:
+        if ord(message[i]) < 128:
+            if message[i] != '\\':
                 file_descriptor.write(message[i])
                 i = i + 1
             else:
-                if message[i + 1] == 'n':
-                    file_descriptor.write(chr(10))
-                elif message[i + 1] == 't':
-                    file_descriptor.write(chr(9))
+                if message[i] == '\\' and message[i + 1] != 'r' and message[i + 1] != 'n' and message[i + 1] != 't':
+                    file_descriptor.write(message[i])
+                    i = i + 1
                 else:
-                    file_descriptor.write("")
-                i = i + 2
+                    if message[i + 1] == 'n':
+                        file_descriptor.write(chr(10))
+                    elif message[i + 1] == 't':
+                        file_descriptor.write(chr(9))
+                    else:
+                        file_descriptor.write("")
+                    i = i + 2
+        else:
+            i = i + 1
     file_descriptor.close()
     subprocess.call(["notepad.exe", paths[1]])
     while not file_descriptor.closed:
         os.wait()
-
-    #read from file,encrypt again,write back in file
-
+    text_from_file = read_from_file(paths[1])
+    encripted_text_from_file = encrypt(text_from_file, key)
+    encripted_text_from_file = binary_to_text(encripted_text_from_file)
+    write_in_file(paths[1], encripted_text_from_file)
+    # read from file,encrypt again,write back in file
 
 # def example():
 #     try:

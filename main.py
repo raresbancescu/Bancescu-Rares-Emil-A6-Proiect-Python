@@ -41,8 +41,9 @@ def main():
     # encript_file(pk,sk,n)
     # decript_file(pk,sk,n)
     #hibrid_encription()
-    create_file("rares.txt")
-    read_file("rares.txt")
+    #create_file("rares3.txt")
+    read_file("rares3.txt")
+    #read_file("test.txt")
     #generate_paths()
 if __name__ == "__main__":
    main()
