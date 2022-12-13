@@ -311,17 +311,3 @@ def binary_to_text(bit_string):
         returned_text += chr(number)
     return returned_text
 
-
-# print(text_to_binary("rares"))
-# cipher = encrypt("rares", "0110001101110010011010010111000001110100011011110110001101110010")
-# print(binary_to_text(cipher))
-# plain = decript(cipher, "0110001101110010011010010111000001110100011011110110001101110010")
-# print(binary_to_text(plain))
-
-# print("second round: ")
-# print(text_to_binary("raresraresraresraresraresraresraresraresraresraresraresraresraresraresraresrares"))
-# cipher = encrypt("raresrares123123 :'8888**&3raresraresraresraresraresraresraresraresraresraresraresraresraresrares", key_to_binary("cripto"))
-# print(binary_to_text(cipher))
-# cipher=binary_to_text(cipher)
-# plain = decript(cipher, key_to_binary("cripto"))
-# print(binary_to_text(plain))

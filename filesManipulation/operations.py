@@ -2,9 +2,8 @@ import os
 import string
 import subprocess
 from encryptionAlgorithms.rsa import rsa, generate_parameters
-from encryptionAlgorithms.des import encrypt, decript, binary_to_text, text_to_binary
+from encryptionAlgorithms.des import binary_to_text, text_to_binary
 from random import choice
-from string import ascii_lowercase
 from encryptionAlgorithms.des import encrypt, decript
 from databaseOperations.database import *
 
@@ -34,7 +33,6 @@ def generate_paths():
     for dirs, root, files in os.walk(r"D:\\facultate\\Anul 3\\Semestrul 1\\Python\\Proiect\\secretdata"):
         for file in files:
             paths.append(os.path.abspath(os.path.join(dirs, file)))
-    print(paths)
     secret_path = r'D:/facultate/Anul 3/Semestrul 1/Python/Proiect/secretdata'
     pk_name = "".join(choice(string.ascii_lowercase) for i in range(10))
     pk_name = secret_path + "/" + pk_name
@@ -74,7 +72,6 @@ def create_file(file_name):
             os.wait()
         file_descriptor = open(file_path, "rb")
         text_from_file = file_descriptor.read()
-        print(text_from_file)
         file_descriptor.close()
         os.remove(file_path)
         # encription part
@@ -95,7 +92,6 @@ def create_file(file_name):
         file_path
         query = "insert into files values (\'%s\',\'%s\',\'%s\',\'%s\',\'%s\')" % (
             file_name, file_path, pk_path, sk_path, key_path)
-        print(query)
         database_update(query)
     except Exception as e:
         print(e)
@@ -105,7 +101,6 @@ def read_file(file_name):
     query = "select * from files where filename='%s'" % file_name
     result = database_select(query)
     result = result[0]
-
     paths = list()
     for res in result:
         res = str(res)
@@ -128,17 +123,17 @@ def read_file(file_name):
     message = binary_to_text(message)
     # write the message back in file
     message = str(message)
-    print(message)
-    file_descriptor = open(paths[1], "w+")
-
     if message[0] == 'b' and message[1] == '\'':
         i = 2
     else:
         i = 0
-    message_length = len(message)-1
-    while message[message_length] == 0:
+    message_length = len(message) - 1
+    copy_message_length=message_length
+    while message[message_length] != '\'' and message_length>=1:
         message_length -= 1
-    message_length -= 1
+    if message_length==0:
+        message_length=copy_message_length
+    file_descriptor = open(paths[1], "w+")
     while i < message_length:
         if ord(message[i]) < 128:
             if message[i] != '\\':
@@ -166,22 +161,3 @@ def read_file(file_name):
     encripted_text_from_file = encrypt(text_from_file, key)
     encripted_text_from_file = binary_to_text(encripted_text_from_file)
     write_in_file(paths[1], encripted_text_from_file)
-    # read from file,encrypt again,write back in file
-
-# def example():
-#     try:
-#         file_descriptor = open(r"D:\facultate\Anul 3\Semestrul 1\Python\Proiect\rares.txt", "wb")
-#         #scriem in fisierul asta
-#         file_descriptor.close()
-#         program_name = "notepad.exe"
-#         subprocess.call([program_name,r"D:\facultate\Anul 3\Semestrul 1\Python\Proiect\rares.txt"])
-#         while not file_descriptor.closed:
-#             os.wait()
-#         file_descriptor = open(r"D:\facultate\Anul 3\Semestrul 1\Python\Proiect\rares.txt", "r")
-#         text = file_descriptor.read()
-#         print(text)
-#         file_descriptor.close()
-#         os.remove(r"D:\facultate\Anul 3\Semestrul 1\Python\Proiect\rares.txt")
-#         file_descriptor.close()
-#     except Exception as e:
-#         print(e)

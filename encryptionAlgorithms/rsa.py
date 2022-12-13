@@ -55,8 +55,6 @@ def generate_parameters():
         if math.gcd(coprime, pk) == 1:
             ok = 1
     sk = pow(pk, -1, coprime)
-    # print("First number", int(first_number))
-    # print("Second number", int(second_number))
     return pk, sk, n
 
 
@@ -73,23 +71,17 @@ def rsa(message, mode, pk, sk, n):
             if len(str(ord(c))) == 1:
                 number = number * 10
                 number = number + ord(c)
-        #print(number)
+
         cripted_message = pow(int(number), pk, n)
 
-        #print(cripted_message)
-        # print("Numar criptat ",cripted_message)
         ascii_cripted_message = ""
         ok = 0
         if len(str(cripted_message)) % 2 == 1:
-            print("Nu este bine aici:")
             cripted_message = str(cripted_message)
             cripted_message += '0'
             ok = 1
         cripted_message = str(cripted_message)
         for i in range(0, len(cripted_message), 2):
-            # if ok==1:
-            #     if (i==len(cripted_message)):
-            #         ascii_cripted_message+=chr(cripted_message[len(cripted_message)-1])
             ascii_cripted_message += chr(int(cripted_message[i:i + 2]))
         if ok == 1:
             ascii_cripted_message += "-1"
@@ -104,7 +96,6 @@ def rsa(message, mode, pk, sk, n):
         for i in message:
             decript_number *= 100;
             decript_number += ord(i)
-        #print("Numar decriptat:", decript_number)
         if ok == 1:
             decript_number = str(decript_number)
             decript_number = decript_number[0:len(decript_number) - 1]

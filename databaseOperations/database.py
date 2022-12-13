@@ -38,14 +38,3 @@ def database_select(query):
         return result_string
     except Exception as e:
         print(e)  # return "error" next step
-
-
-# file_name = r"rares3.txt"
-# file_path = r"/encriptedfiles/rares.txt"
-# public_key_path = r"/encriptedfiles/rares.txt"
-# encrypted_key_path = r"/encriptedfiles/rares.txt"
-# query = "insert into files  values (\"%s\",\"%s\",\"%s\",\"%s\")" % (
-#     file_name, file_path, public_key_path, encrypted_key_path)
-# # database_update(query)
-# result = database_select("select * from files")
-# print(result)
