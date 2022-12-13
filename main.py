@@ -1,6 +1,14 @@
 from filesManipulation.operations import *
 
 
+def check_file(file_name):
+    for dirs, root, files in os.walk("D:\\facultate\\Anul 3\\Semestrul 1\\Python\\Proiect\\encriptedfiles"):
+        for file in files:
+            if file_name == file:
+                return False
+    return True
+
+
 def menu():
     read_from_keyboard = ""
     print("Instructiuni:\n"
@@ -14,11 +22,27 @@ def menu():
         if len(read_from_keyboard) == 2:
             file = read_from_keyboard[1]
             if read_from_keyboard[0] == "Create":
-                create_file(file)
-            if read_from_keyboard[0] == "Read":
-                read_file(file)
-            if read_from_keyboard[0] == "Delete":
-                delete_file(file)
+                if check_file(file):
+                    create_file(file)
+                else:
+                    print("File already exists\n")
+            elif read_from_keyboard[0] == "Read":
+                if not check_file(file):
+                    read_file(file)
+                else:
+                    print("File doesn't exists. Create first\n")
+            elif read_from_keyboard[0] == "Delete":
+                if not check_file(file):
+                    delete_file(file)
+                else:
+                    print("File doesn't exists. Create first\n")
+            elif read_from_keyboard[0] == "Update":
+                if not check_file(file):
+                    change_security_for_file(file)
+                else:
+                    print("File doesn't exists. Create first\n")
+            else:
+                print("Comanda nu este coreta")
         else:
             print("Comanda nu este corecta")
         read_from_keyboard = input("Enter:")
@@ -27,10 +51,7 @@ def menu():
 
 def main():
 
-    # create_file("rares2.txt")
     menu()
-    #read_file("rares2.txt")
-
 
 
 if __name__ == "__main__":
