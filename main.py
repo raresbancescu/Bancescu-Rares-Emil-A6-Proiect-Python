@@ -18,7 +18,7 @@ def menu():
             if read_from_keyboard[0] == "Read":
                 read_file(file)
             if read_from_keyboard[0] == "Delete":
-                print("Delete ", file)
+                delete_file(file)
         else:
             print("Comanda nu este corecta")
         read_from_keyboard = input("Enter:")

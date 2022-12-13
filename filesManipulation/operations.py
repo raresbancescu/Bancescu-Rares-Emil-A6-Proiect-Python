@@ -128,11 +128,11 @@ def read_file(file_name):
     else:
         i = 0
     message_length = len(message) - 1
-    copy_message_length=message_length
-    while message[message_length] != '\'' and message_length>=1:
+    copy_message_length = message_length
+    while message[message_length] != '\'' and message_length >= 1:
         message_length -= 1
-    if message_length==0:
-        message_length=copy_message_length
+    if message_length == 0:
+        message_length = copy_message_length
     file_descriptor = open(paths[1], "w+")
     while i < message_length:
         if ord(message[i]) < 128:
@@ -161,3 +161,20 @@ def read_file(file_name):
     encripted_text_from_file = encrypt(text_from_file, key)
     encripted_text_from_file = binary_to_text(encripted_text_from_file)
     write_in_file(paths[1], encripted_text_from_file)
+
+
+def delete_file(file_name):
+    query = "select * from files where filename='%s'" % file_name
+    result = database_select(query)
+    result = result[0]
+    paths = list()
+    for res in result:
+        res = str(res)
+        res = res.replace("/", "\\")
+        paths.append(res)
+    os.remove(paths[1])
+    os.remove(paths[2])
+    os.remove(paths[3])
+    os.remove(paths[4])
+    query = "delete from files where filename='%s'" % file_name
+    database_update(query)
