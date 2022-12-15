@@ -99,6 +99,7 @@ def create_file(file_name):
 
 def read_file(file_name):
     query = "select * from files where filename='%s'" % file_name
+    temporary_file = r"D:\facultate\Anul 3\Semestrul 1\Python\Proiect\\temp.txt"
     result = database_select(query)
     result = result[0]
     paths = list()
@@ -123,17 +124,20 @@ def read_file(file_name):
     message = binary_to_text(message)
     # write the message back in file
     message = str(message)
-    if message[0] == 'b' and message[1] == '\'':
-        i = 2
-    else:
-        i = 0
-    message_length = len(message) - 1
-    copy_message_length = message_length
-    while message[message_length] != '\'' and message_length >= 1:
-        message_length -= 1
-    if message_length == 0:
-        message_length = copy_message_length
-    file_descriptor = open(paths[1], "w+")
+    i=0
+    message_length=0
+    if len(message) != 0:
+        if message[0] == 'b' and message[1] == '\'':
+            i = 2
+        else:
+            i = 0
+        message_length = len(message) - 1
+        copy_message_length = message_length
+        while message[message_length] != '\'' and message_length >= 1:
+            message_length -= 1
+        if message_length == 0:
+            message_length = copy_message_length
+    file_descriptor = open(temporary_file, "w")
     while i < message_length:
         if ord(message[i]) < 128:
             if message[i] != '\\':
@@ -154,10 +158,11 @@ def read_file(file_name):
         else:
             i = i + 1
     file_descriptor.close()
-    subprocess.call(["notepad.exe", paths[1]])
+    subprocess.call(["notepad.exe", temporary_file])
     while not file_descriptor.closed:
         os.wait()
-    text_from_file = read_from_file(paths[1])
+    text_from_file = read_from_file(temporary_file)
+    os.remove(temporary_file)
     encripted_text_from_file = encrypt(text_from_file, key)
     encripted_text_from_file = binary_to_text(encripted_text_from_file)
     write_in_file(paths[1], encripted_text_from_file)

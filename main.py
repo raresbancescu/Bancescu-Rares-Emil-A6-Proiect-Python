@@ -2,6 +2,11 @@ from filesManipulation.operations import *
 
 
 def check_file(file_name):
+    """
+functie care verifica daca o functie
+    :param file_name:
+    :return:
+    """
     for dirs, root, files in os.walk("D:\\facultate\\Anul 3\\Semestrul 1\\Python\\Proiect\\encriptedfiles"):
         for file in files:
             if file_name == file:
@@ -10,6 +15,9 @@ def check_file(file_name):
 
 
 def menu():
+    """
+functia meniu
+    """
     read_from_keyboard = ""
     print("Instructiuni:\n"
           "Create <filename> \n"

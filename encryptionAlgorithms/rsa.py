@@ -4,6 +4,11 @@ import random
 
 # Miller-Rabbin primality test
 def isPrime(n):
+    """
+dsakdjshakdjsahkjh
+    :param n: numarul pe care il verificam daca este prim
+    :return:
+    """
     n = int(n)
     b = 0
     if n <= 3 or n % 2 == 0:
