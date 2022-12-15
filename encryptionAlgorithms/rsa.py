@@ -3,18 +3,20 @@ import random
 
 
 # Miller-Rabbin primality test
-def isPrime(n):
+def is_prime(n):
     """
-dsakdjshakdjsahkjh
-    :param n: numarul pe care il verificam daca este prim
-    :return:
+Miller-Rabbin primality test: check is a given number is likely to be prime. We use this primality test because we check
+if a number of 512 bits is prime. A non-deterministic algorithm for a number of this size will not be able to compute
+the result in a reasonable time
+    :param int n: a number that we want to check if it is prime
+    :return: True if the number is prime, False otherwise
     """
     n = int(n)
-    b = 0
     if n <= 3 or n % 2 == 0:
         return False
     u = n - 1
     k = 0
+    # search for u such that n-1=m*2^k
     while u % 2 == 0:
         u = u // 2
         k += 1
@@ -34,36 +36,51 @@ dsakdjshakdjsahkjh
     return True
 
 
-# Generam 2 numere prime pe 512 biti p si q ( RSA 1024 ) si calculam prodului lor n=p*q
-# cheia publica e(prima valoare la return): numar random pe max 32 biti prim cu (p-1)(q-1)
-# cheia privata d este e^(-1) mod (p-1)(q-1)
 def generate_parameters():
-    ok = 0
+    """
+This function generate the parameters we need for RSA-Encryption: Public key(pk) and Secret key(sk).
+First we generate two prime numbers(512 bits) p and q which are used for computing RSA-1024
+n=p*q
+e small exponent 1<e<Φ(n) ( Φ(n)=(p-1)(q-1) ) and co-prime to Φ(n)
+public key(pk): e,n
+secret key(sk) d,n where d= e^-1 mod Φ(n)
+    :return: e d n
+    """
     first_number = 0
     second_number = 0
     pk = 0
-    sk = 0
     while first_number == 0:
         p = random.getrandbits(512)
-        if isPrime(p) == True:
+        if is_prime(p):
             first_number = p
     while second_number == 0:
         q = random.getrandbits(512)
-        if isPrime(q) == True:
+        if is_prime(q):
             second_number = q
 
-    n = p * q
-    coprime = (p - 1) * (q - 1)
+    n = first_number * second_number
+    co_prime = (first_number - 1) * (second_number - 1)
     ok = 0
     while ok == 0:
-        pk = random.randrange(1, 4294967295)
-        if math.gcd(coprime, pk) == 1:
+        pk = random.randrange(1, co_prime)
+        if math.gcd(co_prime, pk) == 1:
             ok = 1
-    sk = pow(pk, -1, coprime)
+    sk = pow(pk, -1, co_prime)
     return pk, sk, n
 
 
 def rsa(message, mode, pk, sk, n):
+    """
+The main function of the Rsa encryption algorithm. The message is transformed into a number using ascii encoding
+,and we apply the transformation on this number. After that we change back the number to ascii encoding.
+We use mode to know if we encrypt or decrypt a message
+    :param string message: The message we want to encrypt/decrypt
+    :param string mode: "encrypt" for encrypting the message, "decrypt" for decrypting the message
+    :param int pk: e from generate_parameters
+    :param int sk: d from generate_parameters
+    :param int n:  n from generate_parameters
+    :return string: encrypted or decrypted message, it depends on mode parameter
+    """
     if mode == "encrypt":
         number = 0
         for c in message:
@@ -77,20 +94,20 @@ def rsa(message, mode, pk, sk, n):
                 number = number * 10
                 number = number + ord(c)
 
-        cripted_message = pow(int(number), pk, n)
+        encrypted_message = pow(int(number), pk, n)
 
-        ascii_cripted_message = ""
+        ascii_encrypted_message = ""
         ok = 0
-        if len(str(cripted_message)) % 2 == 1:
-            cripted_message = str(cripted_message)
-            cripted_message += '0'
+        if len(str(encrypted_message)) % 2 == 1:
+            encrypted_message = str(encrypted_message)
+            encrypted_message += '0'
             ok = 1
-        cripted_message = str(cripted_message)
-        for i in range(0, len(cripted_message), 2):
-            ascii_cripted_message += chr(int(cripted_message[i:i + 2]))
+        encrypted_message = str(encrypted_message)
+        for i in range(0, len(encrypted_message), 2):
+            ascii_encrypted_message += chr(int(encrypted_message[i:i + 2]))
         if ok == 1:
-            ascii_cripted_message += "-1"
-        return ascii_cripted_message
+            ascii_encrypted_message += "-1"
+        return ascii_encrypted_message
     elif mode == "decrypt":
         decript_number = 0
         ok = 0

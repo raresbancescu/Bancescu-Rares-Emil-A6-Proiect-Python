@@ -1,4 +1,4 @@
-
+# initial permutation
 IP = [58, 50, 42, 34, 26, 18, 10, 2,
       60, 52, 44, 36, 28, 20, 12, 4,
       62, 54, 46, 38, 30, 22, 14, 6,
@@ -8,7 +8,7 @@ IP = [58, 50, 42, 34, 26, 18, 10, 2,
       61, 53, 45, 37, 29, 21, 13, 5,
       63, 55, 47, 39, 31, 23, 15, 7]
 
-# expansion d-box table exp_d
+# d-box expansion
 RE = [32, 1, 2, 3, 4, 5, 4, 5,
       6, 7, 8, 9, 8, 9, 10, 11,
       12, 13, 12, 13, 14, 15, 16, 17,
@@ -27,45 +27,45 @@ box_permutation = [16, 7, 20, 21,
                    22, 11, 4, 25]
 
 # S-box Table
-sbox = [[[14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7],
-         [0, 15, 7, 4, 14, 2, 13, 1, 10, 6, 12, 11, 9, 5, 3, 8],
-         [4, 1, 14, 8, 13, 6, 2, 11, 15, 12, 9, 7, 3, 10, 5, 0],
-         [15, 12, 8, 2, 4, 9, 1, 7, 5, 11, 3, 14, 10, 0, 6, 13]],
+s_box_matrix = [[[14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7],
+                 [0, 15, 7, 4, 14, 2, 13, 1, 10, 6, 12, 11, 9, 5, 3, 8],
+                 [4, 1, 14, 8, 13, 6, 2, 11, 15, 12, 9, 7, 3, 10, 5, 0],
+                 [15, 12, 8, 2, 4, 9, 1, 7, 5, 11, 3, 14, 10, 0, 6, 13]],
 
-        [[15, 1, 8, 14, 6, 11, 3, 4, 9, 7, 2, 13, 12, 0, 5, 10],
-         [3, 13, 4, 7, 15, 2, 8, 14, 12, 0, 1, 10, 6, 9, 11, 5],
-         [0, 14, 7, 11, 10, 4, 13, 1, 5, 8, 12, 6, 9, 3, 2, 15],
-         [13, 8, 10, 1, 3, 15, 4, 2, 11, 6, 7, 12, 0, 5, 14, 9]],
+                [[15, 1, 8, 14, 6, 11, 3, 4, 9, 7, 2, 13, 12, 0, 5, 10],
+                 [3, 13, 4, 7, 15, 2, 8, 14, 12, 0, 1, 10, 6, 9, 11, 5],
+                 [0, 14, 7, 11, 10, 4, 13, 1, 5, 8, 12, 6, 9, 3, 2, 15],
+                 [13, 8, 10, 1, 3, 15, 4, 2, 11, 6, 7, 12, 0, 5, 14, 9]],
 
-        [[10, 0, 9, 14, 6, 3, 15, 5, 1, 13, 12, 7, 11, 4, 2, 8],
-         [13, 7, 0, 9, 3, 4, 6, 10, 2, 8, 5, 14, 12, 11, 15, 1],
-         [13, 6, 4, 9, 8, 15, 3, 0, 11, 1, 2, 12, 5, 10, 14, 7],
-         [1, 10, 13, 0, 6, 9, 8, 7, 4, 15, 14, 3, 11, 5, 2, 12]],
+                [[10, 0, 9, 14, 6, 3, 15, 5, 1, 13, 12, 7, 11, 4, 2, 8],
+                 [13, 7, 0, 9, 3, 4, 6, 10, 2, 8, 5, 14, 12, 11, 15, 1],
+                 [13, 6, 4, 9, 8, 15, 3, 0, 11, 1, 2, 12, 5, 10, 14, 7],
+                 [1, 10, 13, 0, 6, 9, 8, 7, 4, 15, 14, 3, 11, 5, 2, 12]],
 
-        [[7, 13, 14, 3, 0, 6, 9, 10, 1, 2, 8, 5, 11, 12, 4, 15],
-         [13, 8, 11, 5, 6, 15, 0, 3, 4, 7, 2, 12, 1, 10, 14, 9],
-         [10, 6, 9, 0, 12, 11, 7, 13, 15, 1, 3, 14, 5, 2, 8, 4],
-         [3, 15, 0, 6, 10, 1, 13, 8, 9, 4, 5, 11, 12, 7, 2, 14]],
+                [[7, 13, 14, 3, 0, 6, 9, 10, 1, 2, 8, 5, 11, 12, 4, 15],
+                 [13, 8, 11, 5, 6, 15, 0, 3, 4, 7, 2, 12, 1, 10, 14, 9],
+                 [10, 6, 9, 0, 12, 11, 7, 13, 15, 1, 3, 14, 5, 2, 8, 4],
+                 [3, 15, 0, 6, 10, 1, 13, 8, 9, 4, 5, 11, 12, 7, 2, 14]],
 
-        [[2, 12, 4, 1, 7, 10, 11, 6, 8, 5, 3, 15, 13, 0, 14, 9],
-         [14, 11, 2, 12, 4, 7, 13, 1, 5, 0, 15, 10, 3, 9, 8, 6],
-         [4, 2, 1, 11, 10, 13, 7, 8, 15, 9, 12, 5, 6, 3, 0, 14],
-         [11, 8, 12, 7, 1, 14, 2, 13, 6, 15, 0, 9, 10, 4, 5, 3]],
+                [[2, 12, 4, 1, 7, 10, 11, 6, 8, 5, 3, 15, 13, 0, 14, 9],
+                 [14, 11, 2, 12, 4, 7, 13, 1, 5, 0, 15, 10, 3, 9, 8, 6],
+                 [4, 2, 1, 11, 10, 13, 7, 8, 15, 9, 12, 5, 6, 3, 0, 14],
+                 [11, 8, 12, 7, 1, 14, 2, 13, 6, 15, 0, 9, 10, 4, 5, 3]],
 
-        [[12, 1, 10, 15, 9, 2, 6, 8, 0, 13, 3, 4, 14, 7, 5, 11],
-         [10, 15, 4, 2, 7, 12, 9, 5, 6, 1, 13, 14, 0, 11, 3, 8],
-         [9, 14, 15, 5, 2, 8, 12, 3, 7, 0, 4, 10, 1, 13, 11, 6],
-         [4, 3, 2, 12, 9, 5, 15, 10, 11, 14, 1, 7, 6, 0, 8, 13]],
+                [[12, 1, 10, 15, 9, 2, 6, 8, 0, 13, 3, 4, 14, 7, 5, 11],
+                 [10, 15, 4, 2, 7, 12, 9, 5, 6, 1, 13, 14, 0, 11, 3, 8],
+                 [9, 14, 15, 5, 2, 8, 12, 3, 7, 0, 4, 10, 1, 13, 11, 6],
+                 [4, 3, 2, 12, 9, 5, 15, 10, 11, 14, 1, 7, 6, 0, 8, 13]],
 
-        [[4, 11, 2, 14, 15, 0, 8, 13, 3, 12, 9, 7, 5, 10, 6, 1],
-         [13, 0, 11, 7, 4, 9, 1, 10, 14, 3, 5, 12, 2, 15, 8, 6],
-         [1, 4, 11, 13, 12, 3, 7, 14, 10, 15, 6, 8, 0, 5, 9, 2],
-         [6, 11, 13, 8, 1, 4, 10, 7, 9, 5, 0, 15, 14, 2, 3, 12]],
+                [[4, 11, 2, 14, 15, 0, 8, 13, 3, 12, 9, 7, 5, 10, 6, 1],
+                 [13, 0, 11, 7, 4, 9, 1, 10, 14, 3, 5, 12, 2, 15, 8, 6],
+                 [1, 4, 11, 13, 12, 3, 7, 14, 10, 15, 6, 8, 0, 5, 9, 2],
+                 [6, 11, 13, 8, 1, 4, 10, 7, 9, 5, 0, 15, 14, 2, 3, 12]],
 
-        [[13, 2, 8, 4, 6, 15, 11, 1, 10, 9, 3, 14, 5, 0, 12, 7],
-         [1, 15, 13, 8, 10, 3, 7, 4, 12, 5, 6, 11, 0, 14, 9, 2],
-         [7, 11, 4, 1, 9, 12, 14, 2, 0, 6, 10, 13, 15, 3, 5, 8],
-         [2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11]]]
+                [[13, 2, 8, 4, 6, 15, 11, 1, 10, 9, 3, 14, 5, 0, 12, 7],
+                 [1, 15, 13, 8, 10, 3, 7, 4, 12, 5, 6, 11, 0, 14, 9, 2],
+                 [7, 11, 4, 1, 9, 12, 14, 2, 0, 6, 10, 13, 15, 3, 5, 8],
+                 [2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11]]]
 
 # Final Permutation Table final_perm
 IPF = [40, 8, 48, 16, 56, 24, 64, 32,
@@ -109,24 +109,35 @@ s_box = [0] * 100
 generated_keys = []
 plain_text = []
 copy_plain_text = []
-cripted_text = []
+encrypted_text = []
 main_text = []
-cripted_text_final = []
+encrypted_text_final = []
 number_of_bits = 0
 
 
 def text_to_binary(message):
+    """
+    Function used transform a message from ascii to binary form
+    :param str message: The message to transform into binary form
+    :return str: The binary form of the message
+    """
     message = str(message)
     message_binary = ''.join(format(ord(i), '08b') for i in message)
     while len(message_binary) % 64 != 0:
         message_binary += '0'
 
-    for l in message_binary:
-        main_text.append(l)
+    for bit in message_binary:
+        main_text.append(bit)
     return message_binary
 
 
 def shift_left(k, nth_shifts):
+    """
+    Function used for shifting the binary list k nth_shifts to the left
+    :param str k: The list we want to shift n bits to the left
+    :param int nth_shifts: The number of bytes we want to shift
+    :return str: the list shifted
+    """
     s = ""
     for i in range(nth_shifts):
         for j in range(1, len(k)):
@@ -138,6 +149,12 @@ def shift_left(k, nth_shifts):
 
 
 def xor(a, b):
+    """
+    Function that applies xor on binary number a and binary number b ( represented as str )
+    :param str a:
+    :param str b:
+    :return str: xor between a and b
+    """
     ans = ""
     for i in range(len(a)):
         if a[i] == b[i]:
@@ -147,7 +164,26 @@ def xor(a, b):
     return ans
 
 
+def permute(to_perm, permutation_table, n):
+    """
+    Function that applies the permutation from a permutation table ( Standard permutations for DES ) on to_perm
+    :param str to_perm: the string (binary) we want to permute
+    :param list permutation_table: An standard permutation of DES
+    :param int n: the size of the permutation_table
+    :return str: the string to_perm permuted
+    """
+    permutation = ""
+    for i in range(0, n):
+        permutation = permutation + to_perm[permutation_table[i] - 1]
+    return permutation
+
+
 def round_keys(key):
+    """
+Function that generates 16 round keys, one for each permutation of DES
+    :param str key: DES key
+    :return list: The list with all 16 keys
+    """
     left = key[0:28]
     right = key[28:56]
     round_k = []
@@ -162,10 +198,14 @@ def round_keys(key):
     return round_k
 
 
-def bin2dec(binary):
-    binary1 = binary
+def binary_to_decimal(binary):
+    """
+    Function that converts a number from base 2 to base 10
+    :param int binary: The binary number we want to convert
+    :return str: The number converted to base 10
+    """
     decimal, i, n = 0, 0, 0
-    while (binary != 0):
+    while binary != 0:
         dec = binary % 10
         decimal = decimal + dec * pow(2, i)
         binary = binary // 10
@@ -173,15 +213,51 @@ def bin2dec(binary):
     return decimal
 
 
-def dec2bin(num):
-    res = bin(num).replace("0b", "")
-    if (len(res) % 4 != 0):
+def decimal_to_binary(number):
+    """
+    Function that converts a number from base 10 to base 2
+    :param int number: The decimal number we want to convert
+    :return str: The number converted to base 2
+    """
+    res = bin(number).replace("0b", "")
+    if len(res) % 4 != 0:
         div = len(res) / 4
         div = int(div)
         counter = (4 * (div + 1)) - len(res)
         for i in range(0, counter):
             res = '0' + res
     return res
+
+
+def binary_to_text(bit_string):
+    """
+    Function that transforms a text from ASCII to binary form
+    :param str bit_string: the bit string we want to transform to text
+    :return str: Text form of the binary message
+    """
+    returned_text = ""
+    for i in range(0, len(bit_string), 8):
+        current_bit_string = bit_string[i:i + 8]
+        number = 0
+        power = 1
+        current_bit_string = int(current_bit_string)
+        while current_bit_string > 0:
+            rem = current_bit_string % 10
+            current_bit_string = current_bit_string // 10
+            number += rem * power
+            power = power * 2
+        returned_text += chr(number)
+    return returned_text
+
+
+def key_to_binary(message):
+    """
+    Function that transform the DES key from text to binary form
+    :param str message: The key we want to transform
+    :return str: The binary form of the key
+    """
+    binary_key = text_to_binary(message)
+    return binary_key
 
 
 def encrypt(plain, key):
@@ -208,11 +284,11 @@ def encrypt(plain, key):
             # S-boxex: substituting the value from s-box table by calculating row and column
             sbox_str = ""
             for j in range(0, 8):
-                row = bin2dec(int(xor_x[j * 6] + xor_x[j * 6 + 5]))
-                col = bin2dec(
+                row = binary_to_decimal(int(xor_x[j * 6] + xor_x[j * 6 + 5]))
+                col = binary_to_decimal(
                     int(xor_x[j * 6 + 1] + xor_x[j * 6 + 2] + xor_x[j * 6 + 3] + xor_x[j * 6 + 4]))
-                val = sbox[j][row][col]
-                sbox_str = sbox_str + dec2bin(val)
+                val = s_box_matrix[j][row][col]
+                sbox_str = sbox_str + decimal_to_binary(val)
 
             # Straight D-box: After substituting rearranging the bits
             sbox_str = permute(sbox_str, box_permutation, 32)
@@ -236,9 +312,9 @@ def encrypt(plain, key):
 
 def decript(encripted_text, key):
     final_return = ""
-    encripted_text=binary_to_text(encripted_text)
-    key=key_to_binary(key)
-    encripted_text=text_to_binary(encripted_text)
+    encripted_text = binary_to_text(encripted_text)
+    key = key_to_binary(key)
+    encripted_text = text_to_binary(encripted_text)
     key = permute(key, key_perm, 56)
     round_k = round_keys(key)
     round_k = round_k[::-1]
@@ -259,11 +335,11 @@ def decript(encripted_text, key):
             # S-boxex: substituting the value from s-box table by calculating row and column
             sbox_str = ""
             for j in range(0, 8):
-                row = bin2dec(int(xor_x[j * 6] + xor_x[j * 6 + 5]))
-                col = bin2dec(
+                row = binary_to_decimal(int(xor_x[j * 6] + xor_x[j * 6 + 5]))
+                col = binary_to_decimal(
                     int(xor_x[j * 6 + 1] + xor_x[j * 6 + 2] + xor_x[j * 6 + 3] + xor_x[j * 6 + 4]))
-                val = sbox[j][row][col]
-                sbox_str = sbox_str + dec2bin(val)
+                val = s_box_matrix[j][row][col]
+                sbox_str = sbox_str + decimal_to_binary(val)
 
             # Straight D-box: After substituting rearranging the bits
             sbox_str = permute(sbox_str, box_permutation, 32)
@@ -283,32 +359,3 @@ def decript(encripted_text, key):
         cipher_text = permute(combine, IPF, 64)
         final_return += cipher_text
     return final_return
-
-
-def permute(k, arr, n):
-    permutation = ""
-    for i in range(0, n):
-        permutation = permutation + k[arr[i] - 1]
-    return permutation
-
-
-def key_to_binary(message):
-    binary_key = text_to_binary(message)
-    return binary_key
-
-
-def binary_to_text(bit_string):
-    returned_text = ""
-    for i in range(0, len(bit_string), 8):
-        current_bit_string = bit_string[i:i + 8]
-        number = 0
-        power = 1
-        current_bit_string = int(current_bit_string)
-        while current_bit_string > 0:
-            rem = current_bit_string % 10
-            current_bit_string = current_bit_string // 10
-            number += rem * power
-            power = power * 2
-        returned_text += chr(number)
-    return returned_text
-
