@@ -292,15 +292,15 @@ def encrypt(plain, key):
         for i in range(0, 16):
             right_expanded = permute(right, RE, 48)
             xor_x = xor(right_expanded, round_k[i])
-            s_sbox_str = ""
+            s_box_str = ""
             for j in range(0, 8):
                 row = binary_to_decimal(int(xor_x[j * 6] + xor_x[j * 6 + 5]))
                 col = binary_to_decimal(
                     int(xor_x[j * 6 + 1] + xor_x[j * 6 + 2] + xor_x[j * 6 + 3] + xor_x[j * 6 + 4]))
                 val = s_box_matrix[j][row][col]
-                s_sbox_str = s_sbox_str + decimal_to_binary(val)
-            s_sbox_str = permute(s_sbox_str, box_permutation, 32)
-            result = xor(left, s_sbox_str)
+                s_box_str = s_box_str + decimal_to_binary(val)
+            s_box_str = permute(s_box_str, box_permutation, 32)
+            result = xor(left, s_box_str)
             left = result
             if i != 15:
                 left, right = right, left

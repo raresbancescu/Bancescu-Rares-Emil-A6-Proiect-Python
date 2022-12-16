@@ -3,9 +3,9 @@ from filesManipulation.operations import *
 
 def check_file(file_name):
     """
-functie care verifica daca o functie
-    :param file_name:
-    :return:
+    Function used for checking if a file name already exists in ecriptedfiles folder
+    :param str file_name: The name of the file we want to check
+    :return bool: true or false
     """
     for dirs, root, files in os.walk("D:\\facultate\\Anul 3\\Semestrul 1\\Python\\Proiect\\encriptedfiles"):
         for file in files:
@@ -16,13 +16,14 @@ functie care verifica daca o functie
 
 def menu():
     """
-functia meniu
+    Function that implements a menu for this application.
     """
-    read_from_keyboard = ""
     print("Instructiuni:\n"
           "Create <filename> \n"
           "Read <filename> \n"
           "Delete <filename> \n"
+          "Update <filename> \n"
+          "Exit for stop \n"
           )
     read_from_keyboard = input("Enter:")
     read_from_keyboard = read_from_keyboard.split()
@@ -58,7 +59,6 @@ functia meniu
 
 
 def main():
-
     menu()
 
 
