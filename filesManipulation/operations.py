@@ -4,11 +4,16 @@ import subprocess
 from encryptionAlgorithms.rsa import rsa, generate_parameters
 from encryptionAlgorithms.des import binary_to_text, text_to_binary
 from random import choice
-from encryptionAlgorithms.des import encrypt, decript
+from encryptionAlgorithms.des import encrypt, decrypt
 from databaseOperations.database import *
 
 
 def write_in_file(file_path, message):
+    """
+    Function used for writing a message in binary mode in a file found at file_path
+    :param str file_path: The absolute path of the file
+    :param str message: The message we want to write in file
+    """
     try:
         message = message.encode()
         file_descriptor = open(file_path, "wb")
@@ -19,6 +24,11 @@ def write_in_file(file_path, message):
 
 
 def read_from_file(file_path):
+    """
+    Function used for reading a message from a file located at file_path in binary form
+    :param str file_path: The absolute path of the file
+    :return str: The message we read from the file
+    """
     try:
         file_descriptor = open(file_path, "rb")
         message = file_descriptor.read()
@@ -29,6 +39,11 @@ def read_from_file(file_path):
 
 
 def generate_paths():
+    """
+    Function used for generating random 10 string length strings for the key paths we need for encryption
+    (RSA keys and DES key)
+    :return str,str,str: Three random strings:pk_name,sk_name,key_name
+    """
     paths = []
     for dirs, root, files in os.walk(r"D:\\facultate\\Anul 3\\Semestrul 1\\Python\\Proiect\\secretdata"):
         for file in files:
@@ -62,6 +77,12 @@ def generate_paths():
 
 
 def create_file(file_name):
+    """
+Function used for creating a new encrypted file. This function encrypts the message in a hybrid encryption mode:
+Generate a key for DES encryption and encrypt this key using RSA
+All the paths for the keys and file are stored in a database, and the actual files are stored encrypted in encriptedfiles and secretdata folders
+    :param str file_name: The name of the file we want to create
+    """
     file_path = r"D:/facultate/Anul 3/Semestrul 1/Python/Proiect/encriptedfiles"
     file_path += "/" + file_name
     try:
@@ -98,6 +119,11 @@ def create_file(file_name):
 
 
 def read_file(file_name):
+    """
+    Function used for reading the encrypted file. The file will not be opened, we can see the information from the file
+    in a temporary file, and we can modify the information
+    :param str file_name: The name of the file we want to read
+    """
     query = "select * from files where filename='%s'" % file_name
     temporary_file = r"D:\facultate\Anul 3\Semestrul 1\Python\Proiect\\temp.txt"
     result = database_select(query)
@@ -120,12 +146,12 @@ def read_file(file_name):
     n = int(public_key[1])
     key = rsa(encripted_key, "decrypt", 0, sk, n)
     text = text_to_binary(text)
-    message = decript(text, key)
+    message = decrypt(text, key)
     message = binary_to_text(message)
     # write the message back in file
     message = str(message)
-    i=0
-    message_length=0
+    i = 0
+    message_length = 0
     if len(message) != 0:
         if message[0] == 'b' and message[1] == '\'':
             i = 2
@@ -169,6 +195,11 @@ def read_file(file_name):
 
 
 def delete_file(file_name):
+    """
+    Function used for deleting a encrypted file. When this function is called, all the links in the database are deleted
+    and also the files associated with the encrypted file are deleted
+    :param str file_name: The name of the file we want to delete
+    """
     query = "select * from files where filename='%s'" % file_name
     result = database_select(query)
     result = result[0]
@@ -186,6 +217,11 @@ def delete_file(file_name):
 
 
 def change_security_for_file(file_name):
+    """
+    Function used for changing the security of the file. When this function is called, all the keys are changed,
+    current keys files are removed and new files are created
+    :param str file_name: The file name of the file we want to secure again
+    """
     file_path = r"D:/facultate/Anul 3/Semestrul 1/Python/Proiect/encriptedfiles"
     file_path += "/" + file_name
     query = "select * from files where filename='%s'" % file_name
@@ -209,7 +245,7 @@ def change_security_for_file(file_name):
     n = int(public_key[1])
     key = rsa(encripted_key, "decrypt", 0, sk, n)
     text = text_to_binary(text)
-    message = decript(text, key)
+    message = decrypt(text, key)
     message = binary_to_text(message)
     message = str(message)
     delete_file(file_name)

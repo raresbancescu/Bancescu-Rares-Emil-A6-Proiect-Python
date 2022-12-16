@@ -86,12 +86,11 @@ key_perm = [57, 49, 41, 33, 25, 17, 9,
             14, 6, 61, 53, 45, 37, 29,
             21, 13, 5, 28, 20, 12, 4]
 
+# for keys generation
 shift_bits = [1, 1, 2, 2,
               2, 2, 2, 2,
               1, 2, 2, 2,
               2, 2, 2, 1]
-
-decript_shift_bits = [0, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1]
 
 key_compression = [14, 17, 11, 24, 1, 5,
                    3, 28, 15, 6, 21, 10,
@@ -117,7 +116,8 @@ number_of_bits = 0
 
 def text_to_binary(message):
     """
-    Function used transform a message from ascii to binary form
+    Function used transform a message from ascii to binary form. If the message is not a multiple of 64 bits we append
+    0 until the message is a multiple of 64 bits
     :param str message: The message to transform into binary form
     :return str: The binary form of the message
     """
@@ -191,7 +191,6 @@ Function that generates 16 round keys, one for each permutation of DES
         left = shift_left(left, shift_bits[i])
         right = shift_left(right, shift_bits[i])
         combine_str = left + right
-
         # Compression of key from 56 to 48 bits
         round_key = permute(combine_str, key_compression, 48)
         round_k.append(round_key)
@@ -261,101 +260,102 @@ def key_to_binary(message):
 
 
 def encrypt(plain, key):
+    """
+    The main function for DES encryption. The function encrypts blocks of 64 bits in ECB mode.
+    The main steps of DES encryption:
+    0. Generate round keys(One key for each round)
+    1. Initial permutation
+    2. Split the text into 2 halves (LPT and RPT)
+    3. LPT and RPT goes through 16 rounds of the encryption process
+    4. Join LPT and RPT
+    5. Perform the final Permutation
+    6. We get the 64 bits block encrypted
+    :param str plain: The text we want to encrypt
+    :param str key: The key for DES encryption
+    :return str: The message encrypted
+    """
     final_return = ""
     key = key_to_binary(key)
+    # round keys
     plain = text_to_binary(plain)
     key = permute(key, key_perm, 56)
     round_k = round_keys(key)
     for block in range(0, len(plain), 64):
         pt = plain[block:block + 64]
-        # Initial Permutation
+        # 1. Initial permutation
         pt = permute(pt, IP, 64)
 
-        # Splitting
+        # 2. Split into 2 halves
         left = pt[0:32]
         right = pt[32:64]
+        # 16 rounds
         for i in range(0, 16):
-            #  Expansion D-box: Expanding the 32 bits data into 48 bits
             right_expanded = permute(right, RE, 48)
-
-            # XOR RoundKey[i] and right_expanded
             xor_x = xor(right_expanded, round_k[i])
-
-            # S-boxex: substituting the value from s-box table by calculating row and column
-            sbox_str = ""
+            s_sbox_str = ""
             for j in range(0, 8):
                 row = binary_to_decimal(int(xor_x[j * 6] + xor_x[j * 6 + 5]))
                 col = binary_to_decimal(
                     int(xor_x[j * 6 + 1] + xor_x[j * 6 + 2] + xor_x[j * 6 + 3] + xor_x[j * 6 + 4]))
                 val = s_box_matrix[j][row][col]
-                sbox_str = sbox_str + decimal_to_binary(val)
-
-            # Straight D-box: After substituting rearranging the bits
-            sbox_str = permute(sbox_str, box_permutation, 32)
-
-            # XOR left and sbox_str
-            result = xor(left, sbox_str)
+                s_sbox_str = s_sbox_str + decimal_to_binary(val)
+            s_sbox_str = permute(s_sbox_str, box_permutation, 32)
+            result = xor(left, s_sbox_str)
             left = result
-
-            # Swapper
-            if (i != 15):
+            if i != 15:
                 left, right = right, left
-
-        # Combination
         combine = left + right
-
-        # Final permutation: final rearranging of bits to get cipher text
         cipher_text = permute(combine, IPF, 64)
         final_return += cipher_text
     return final_return
 
 
-def decript(encripted_text, key):
+def decrypt(enc_text, key):
+    """
+    The main function for DES decryption. The function decrypts an encrypted message(in ECB mode).
+    The main steps of DES decryption:
+    0. Generate round keys(One key for each round,in the reverse order of encryption)
+    1. Initial permutation
+    2. Split the text into 2 halves (LPT and RPT)
+    3. LPT and RPT goes through 16 rounds of the encryption process
+    4. Join LPT and RPT
+    5. Perform the final Permutation
+    6. We get the 64 bits block encrypted
+    :param str enc_text: The text we want to decrypt
+    :param str key: The key for DES decryption (the same key that we used for encryption)
+    :return str: The message encrypted
+    """
     final_return = ""
-    encripted_text = binary_to_text(encripted_text)
+    enc_text = binary_to_text(enc_text)
     key = key_to_binary(key)
-    encripted_text = text_to_binary(encripted_text)
+    enc_text = text_to_binary(enc_text)
     key = permute(key, key_perm, 56)
     round_k = round_keys(key)
+    # put the keys in reverse order
     round_k = round_k[::-1]
-    for block in range(0, len(encripted_text), 64):
-        cipher = encripted_text[block:block + 64]
+    for block in range(0, len(enc_text), 64):
+        cipher = enc_text[block:block + 64]
         cipher = permute(cipher, IP, 64)
 
         # Splitting
         left = cipher[0:32]
         right = cipher[32:64]
         for i in range(0, 16):
-            #  Expansion D-box: Expanding the 32 bits data into 48 bits
             right_expanded = permute(right, RE, 48)
-
-            # XOR RoundKey[i] and right_expanded
             xor_x = xor(right_expanded, round_k[i])
-
-            # S-boxex: substituting the value from s-box table by calculating row and column
-            sbox_str = ""
+            s_box_str = ""
             for j in range(0, 8):
                 row = binary_to_decimal(int(xor_x[j * 6] + xor_x[j * 6 + 5]))
                 col = binary_to_decimal(
                     int(xor_x[j * 6 + 1] + xor_x[j * 6 + 2] + xor_x[j * 6 + 3] + xor_x[j * 6 + 4]))
                 val = s_box_matrix[j][row][col]
-                sbox_str = sbox_str + decimal_to_binary(val)
-
-            # Straight D-box: After substituting rearranging the bits
-            sbox_str = permute(sbox_str, box_permutation, 32)
-
-            # XOR left and sbox_str
-            result = xor(left, sbox_str)
+                s_box_str = s_box_str + decimal_to_binary(val)
+            s_box_str = permute(s_box_str, box_permutation, 32)
+            result = xor(left, s_box_str)
             left = result
-
-            # Swapper
-            if (i != 15):
+            if i != 15:
                 left, right = right, left
-
-        # Combination
         combine = left + right
-
-        # Final permutation: final rearranging of bits to get cipher text
         cipher_text = permute(combine, IPF, 64)
         final_return += cipher_text
     return final_return
