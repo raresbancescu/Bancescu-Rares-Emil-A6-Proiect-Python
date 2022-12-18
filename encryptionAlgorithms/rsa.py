@@ -8,6 +8,7 @@ def is_prime(n):
 Miller-Rabbin primality test: check is a given number is likely to be prime. We use this primality test because we check
 if a number of 512 bits is prime. A non-deterministic algorithm for a number of this size will not be able to compute
 the result in a reasonable time
+
     :param int n: a number that we want to check if it is prime
     :return: True if the number is prime, False otherwise
     """
@@ -44,6 +45,7 @@ n=p*q
 e small exponent 1<e<Φ(n) ( Φ(n)=(p-1)(q-1) ) and co-prime to Φ(n)
 public key(pk): e,n
 secret key(sk) d,n where d= e^-1 mod Φ(n)
+
     :return: e d n
     """
     first_number = 0
@@ -74,6 +76,7 @@ def rsa(message, mode, pk, sk, n):
 The main function of the Rsa encryption algorithm. The message is transformed into a number using ascii encoding
 ,and we apply the transformation on this number. After that we change back the number to ascii encoding.
 We use mode to know if we encrypt or decrypt a message
+
     :param string message: The message we want to encrypt/decrypt
     :param string mode: "encrypt" for encrypting the message, "decrypt" for decrypting the message
     :param int pk: e from generate_parameters

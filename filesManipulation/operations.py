@@ -11,6 +11,7 @@ from databaseOperations.database import *
 def write_in_file(file_path, message):
     """
     Function used for writing a message in binary mode in a file found at file_path
+
     :param str file_path: The absolute path of the file
     :param str message: The message we want to write in file
     """
@@ -26,6 +27,7 @@ def write_in_file(file_path, message):
 def read_from_file(file_path):
     """
     Function used for reading a message from a file located at file_path in binary form
+
     :param str file_path: The absolute path of the file
     :return str: The message we read from the file
     """
@@ -42,6 +44,7 @@ def generate_paths():
     """
     Function used for generating random 10 string length strings for the key paths we need for encryption
     (RSA keys and DES key)
+
     :return str,str,str: Three random strings:pk_name,sk_name,key_name
     """
     paths = []
@@ -80,7 +83,9 @@ def create_file(file_name):
     """
 Function used for creating a new encrypted file. This function encrypts the message in a hybrid encryption mode:
 Generate a key for DES encryption and encrypt this key using RSA
-All the paths for the keys and file are stored in a database, and the actual files are stored encrypted in encriptedfiles and secretdata folders
+All the paths for the keys and file are stored in a database, and the actual files are stored encrypted in encriptedfiles
+and secretdata folders
+
     :param str file_name: The name of the file we want to create
     """
     file_path = r"D:/facultate/Anul 3/Semestrul 1/Python/Proiect/encriptedfiles"
@@ -122,6 +127,7 @@ def read_file(file_name):
     """
     Function used for reading the encrypted file. The file will not be opened, we can see the information from the file
     in a temporary file, and we can modify the information
+
     :param str file_name: The name of the file we want to read
     """
     query = "select * from files where filename='%s'" % file_name
@@ -198,6 +204,7 @@ def delete_file(file_name):
     """
     Function used for deleting a encrypted file. When this function is called, all the links in the database are deleted
     and also the files associated with the encrypted file are deleted
+
     :param str file_name: The name of the file we want to delete
     """
     query = "select * from files where filename='%s'" % file_name
@@ -220,6 +227,7 @@ def change_security_for_file(file_name):
     """
     Function used for changing the security of the file. When this function is called, all the keys are changed,
     current keys files are removed and new files are created
+
     :param str file_name: The file name of the file we want to secure again
     """
     file_path = r"D:/facultate/Anul 3/Semestrul 1/Python/Proiect/encriptedfiles"

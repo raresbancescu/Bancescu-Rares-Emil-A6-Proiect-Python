@@ -4,6 +4,7 @@ from filesManipulation.operations import *
 def check_file(file_name):
     """
     Function used for checking if a file name already exists in ecriptedfiles folder
+
     :param str file_name: The name of the file we want to check
     :return bool: true or false
     """
@@ -16,7 +17,7 @@ def check_file(file_name):
 
 def menu():
     """
-    Function that implements a menu for this application.
+    Function that implements the menu for this application.
     """
     print("Instructiuni:\n"
           "Create <filename> \n"

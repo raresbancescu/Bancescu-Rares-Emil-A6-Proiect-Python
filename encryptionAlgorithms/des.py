@@ -118,6 +118,7 @@ def text_to_binary(message):
     """
     Function used transform a message from ascii to binary form. If the message is not a multiple of 64 bits we append
     0 until the message is a multiple of 64 bits
+
     :param str message: The message to transform into binary form
     :return str: The binary form of the message
     """
@@ -134,6 +135,7 @@ def text_to_binary(message):
 def shift_left(k, nth_shifts):
     """
     Function used for shifting the binary list k nth_shifts to the left
+
     :param str k: The list we want to shift n bits to the left
     :param int nth_shifts: The number of bytes we want to shift
     :return str: the list shifted
@@ -151,6 +153,7 @@ def shift_left(k, nth_shifts):
 def xor(a, b):
     """
     Function that applies xor on binary number a and binary number b ( represented as str )
+
     :param str a:
     :param str b:
     :return str: xor between a and b
@@ -167,8 +170,9 @@ def xor(a, b):
 def permute(to_perm, permutation_table, n):
     """
     Function that applies the permutation from a permutation table ( Standard permutations for DES ) on to_perm
+
     :param str to_perm: the string (binary) we want to permute
-    :param list permutation_table: An standard permutation of DES
+    :param list permutation_table: A standard permutation of DES
     :param int n: the size of the permutation_table
     :return str: the string to_perm permuted
     """
@@ -181,6 +185,7 @@ def permute(to_perm, permutation_table, n):
 def round_keys(key):
     """
 Function that generates 16 round keys, one for each permutation of DES
+
     :param str key: DES key
     :return list: The list with all 16 keys
     """
@@ -200,6 +205,7 @@ Function that generates 16 round keys, one for each permutation of DES
 def binary_to_decimal(binary):
     """
     Function that converts a number from base 2 to base 10
+
     :param int binary: The binary number we want to convert
     :return str: The number converted to base 10
     """
@@ -215,8 +221,9 @@ def binary_to_decimal(binary):
 def decimal_to_binary(number):
     """
     Function that converts a number from base 10 to base 2
-    :param int number: The decimal number we want to convert
-    :return str: The number converted to base 2
+
+    :param number: The decimal number we want to convert
+    :return: The number converted to base 2
     """
     res = bin(number).replace("0b", "")
     if len(res) % 4 != 0:
@@ -231,6 +238,7 @@ def decimal_to_binary(number):
 def binary_to_text(bit_string):
     """
     Function that transforms a text from ASCII to binary form
+
     :param str bit_string: the bit string we want to transform to text
     :return str: Text form of the binary message
     """
@@ -252,6 +260,7 @@ def binary_to_text(bit_string):
 def key_to_binary(message):
     """
     Function that transform the DES key from text to binary form
+
     :param str message: The key we want to transform
     :return str: The binary form of the key
     """
@@ -270,6 +279,7 @@ def encrypt(plain, key):
     4. Join LPT and RPT
     5. Perform the final Permutation
     6. We get the 64 bits block encrypted
+
     :param str plain: The text we want to encrypt
     :param str key: The key for DES encryption
     :return str: The message encrypted
@@ -321,6 +331,7 @@ def decrypt(enc_text, key):
     4. Join LPT and RPT
     5. Perform the final Permutation
     6. We get the 64 bits block encrypted
+
     :param str enc_text: The text we want to decrypt
     :param str key: The key for DES decryption (the same key that we used for encryption)
     :return str: The message encrypted
